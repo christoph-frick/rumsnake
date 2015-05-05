@@ -1,0 +1,54 @@
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+html, body  {
+	background-color: black;
+	color: white;
+	font-family: sans-serif;
+	/*
+	height: 100%;
+	width: 100%;
+	*/
+}
+
+button {
+	color: white;
+	background: black;
+	border: 1px solid white;
+	padding: 1ex 1em;
+	margin-right: 1em;
+}
+
+div {
+	margin-bottom: 1ex;
+}
+
+.debug {
+	font-size: small;
+	color: gray;
+}
+
+table {
+	border-collapse separate;
+	border: 1em solid white;
+}
+
+td {
+	width: 2em;
+	height: 2em;
+	border-radius: 1em;
+}
+
+td.snake {
+	background-color: green;
+	background: radial-gradient(circle, green 10%, black 100%);
+}
+
+td.apple {
+	background-color: red;
+	background: radial-gradient(circle, red 10%, black 100%);
+}
+
