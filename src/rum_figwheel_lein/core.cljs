@@ -5,6 +5,10 @@
 
 (def grid-size 12)
 
+(def scale 4)
+
+(def base-unit "ex")
+
 (def tick-in-ms 250)
 
 ;; helpers
@@ -44,6 +48,10 @@
 
 (defn next-snake-head [snake dir] 
   (map + (first snake) (dir dir-offset)))
+
+(defn unit
+  [n]
+  (str (* scale n) base-unit))
 
 ;; the world
 
@@ -121,24 +129,42 @@
 (r/defc debug < r/reactive []
   [:div {:class "debug"} "Debug of world: " (str (r/react world))])
 
+(defn dot
+  [[x y] color]
+  [:circle {:cx x :cy y :r 0.5
+            :style {:fill color}}])
+
+(r/defc apple < r/reactive []
+  (dot (:apple (r/react world)) "red"))
+
+(r/defc snake < r/reactive []
+  (let [snake (:snake (r/react world))
+        head (first snake)
+        tail (rest snake)] 
+    (if (empty? tail) 
+      (dot head "green")
+      [:path {:d (let [cmb (fn [[x y]] (str x "," y))]
+                   (str 
+                     "M" (cmb head) 
+                     (apply str (map #(str " L" (cmb %)) tail))))
+              :style {:fill "none"
+                      :stroke "green" 
+                      :stroke-width 1
+                      :stroke-linecap "round"
+                      :stroke-linejoin "round"}}])))
+
 (r/defc render-world < r/reactive []
   [:div 
    [:h3 (case (map (r/react world) [:running :alive])
           [true true] "Eat up - press [p] to pause"
           [false true] "Paused - press [p] to continue"
           (str "You are dead! You ate " (dec (count (:snake (r/react world)))) " apples!  Restart with [r]"))]
-   [:div {:class "playfield"} 
-    [:table
-     (for [y (range grid-size)]
-       [:tr
-        (for [x (range grid-size)]
-          (let [p [x y]]
-            [:td 
-             {:class (cond 
-                       (= p (:apple (r/react world))) "apple"
-                       (collide? p (:snake (r/react world))) "snake"
-                       :else ""
-                       )}]))])]]
+   [:div
+    [:svg {:class "playfield"
+           :width (unit grid-size) :height (unit grid-size)
+           :viewBox (str "0 0 " grid-size " " grid-size)}
+     (apple)
+     (snake)]]
    [:div {:class "controlls"}   
     [:button {:on-click restart!} "(R)estart"]
     [:button {:on-click toggle-pause!} "Toggle (P)ause"]]

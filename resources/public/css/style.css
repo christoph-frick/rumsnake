@@ -31,24 +31,6 @@ div {
 	color: gray;
 }
 
-table {
-	border-collapse separate;
-	border: 1em solid white;
+.playfield {
+	border: 1ex solid white;
 }
-
-td {
-	width: 2em;
-	height: 2em;
-	border-radius: 1em;
-}
-
-td.snake {
-	background-color: green;
-	background: radial-gradient(circle, green 10%, black 100%);
-}
-
-td.apple {
-	background-color: red;
-	background: radial-gradient(circle, red 10%, black 100%);
-}
-
